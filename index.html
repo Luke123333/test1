@@ -1,0 +1,76 @@
+<<!DOCTYPE html>
+  <html lang="zh-TW">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>資料藝術 Data Art</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #0d0d0d;
+        color: #fff;
+        font-family: 'Helvetica Neue', sans-serif;
+        overflow: hidden;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      #title {
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        font-size: 2em;
+        font-weight: bold;
+        color: #ffcc00;
+        z-index: 10;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="title">資料藝術：動態生成</div>
+    <canvas id="artCanvas"></canvas>
+
+    <script>
+      const canvas = document.getElementById('artCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particles = [];
+
+      for (let i = 0; i < 300; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 3 + 1,
+          dx: Math.random() - 0.5,
+          dy: Math.random() - 0.5,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (let p of particles) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          p.x += p.dx;
+          p.y += p.dy;
+
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        }
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+  </body>
+
+  </html>
